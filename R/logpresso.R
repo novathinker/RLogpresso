@@ -76,6 +76,7 @@ RLogpresso.create <- function(output=TRUE) {
 			file.remove(filename)
 			return(data)
 		}
+
 		tryCatch({
 			data <- data.frame()
 			while (!.call(qm, "Z", "isEnd")) {
@@ -86,30 +87,20 @@ RLogpresso.create <- function(output=TRUE) {
 			
 			headers <- .call(qm, "[S", "headers")
 			colnames(data) <- headers
+			
+			order <- .call(qm, "[S", "fieldOrder")
+			if (!is.null(order)) {
+				for ( name in order ) {
+					if (!(name %in% colnames(data))) {
+						data[name] <- NA
+					}
+				}
+				data <- data[order]
+			}
+			
 			return(data)
 		}, interrupt=stop, error=stop)
 	}
-	if (FALSE) { client$query <- function(query, interval=1) {
-		connect_check(client)
-		qm <- .jnew("com/logpresso/r/QueryManager2", client$jobj, query)
-		stop <- function(ex) {
-			.call(qm, "V", "stop")
-			print(ex)
-		}
-		tryCatch({
-			while (!.call(qm, "Z", "isEnd"))
-				Sys.sleep(interval);
-			
-			filename <- .call(qm, "S", "filename")
-			nrows <- .call(qm, "I", "rowCount")
-			headers <- .call(qm, "[S", "headers")
-			if (file.info(filename)$size == 0)
-				return(NULL)
-			data <- read.csv(filename, header=FALSE, col.names=headers, nrows=nrows)
-			file.remove(filename)
-			return(data)
-		}, interrupt=stop, error=stop)
-	} }
 	client$createQuery <- function(query) {
 		connect_check(client)
 		id <- .call(client$jobj, "I", "createQuery", query)
