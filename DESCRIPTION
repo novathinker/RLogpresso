@@ -1,10 +1,10 @@
 Package: RLogpresso
 Type: Package
 Title: Logpresso for R
-Version: 1.0
-Date: 2014-11-28
-Author: delmitz
-Maintainer: delmitz <kurosmitz@gmail.com>
-Description: 
-License:
+Version: 1.0.1
+Date: 2016-08-17
+Author: Lim Hyunsu
+Maintainer: Lim Hyunsu <delmitz@eediom.com>
+Description: Logpresso SDK for R
+License: Apache License, Version 2.0
 Packaged: 2014-11-28 05:21:09 UTC; delmitz
