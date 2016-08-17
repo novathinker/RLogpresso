@@ -92,10 +92,11 @@ RLogpresso.create <- function(output=TRUE) {
 			if (!is.null(order)) {
 				for ( name in order ) {
 					if (!(name %in% colnames(data))) {
+						# create undefined column
 						data[name] <- NA
 					}
 				}
-				data <- data[order]
+				data <- data[order] # column reordering
 			}
 			
 			return(data)

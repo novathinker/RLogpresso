@@ -82,6 +82,7 @@ public class QueryManager implements StreamingResultSet {
 					Set<String> copied = new TreeSet<String>(new Comparator<String>() {
 						@Override
 						public int compare(String o1, String o2) {
+							// "_aa" => "_bb" => "aa" => "bb"
 							if (o1.startsWith("_"))
 								return o2.startsWith("_") ? o1.compareTo(o2) : -1;
 							if (o2.startsWith("_"))
