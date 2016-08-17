@@ -4,18 +4,20 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+import java.util.TreeSet;
 
 import com.logpresso.client.Logpresso;
 import com.logpresso.client.Query;
-import com.logpresso.client.Tuple;
 import com.logpresso.client.StreamingResultSet;
+import com.logpresso.client.Tuple;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -36,6 +38,7 @@ public class QueryManager implements StreamingResultSet {
 	private int count1 = 0, count2 = 0;
 	private Object flock = new Object();
 	private List<String> headers = new ArrayList<String>();
+	private String[] fieldOrder;
 	private String[] newline = new String[0];
 
 	public QueryManager(Logpresso client, int id, long offset, int limit) throws IOException {
@@ -74,8 +77,35 @@ public class QueryManager implements StreamingResultSet {
 	public boolean isEnd() {
 		if (isEnd) {
 			try {
+				Map<String, Object> m = client.getResult(id, 0, 0);
+				if (m.containsKey("field_order")) {
+					Set<String> copied = new TreeSet<String>(new Comparator<String>() {
+						@Override
+						public int compare(String o1, String o2) {
+							if (o1.startsWith("_"))
+								return o2.startsWith("_") ? o1.compareTo(o2) : -1;
+							if (o2.startsWith("_"))
+								return 1;
+							return o1.compareTo(o2);
+						}
+					});
+					copied.addAll(headers);
+
+					Object[] order = (Object[]) m.get("field_order");
+					List<String> fieldOrder = new ArrayList<String>();
+					for (int i = 0; i < order.length; i++) {
+						fieldOrder.add((String) order[i]);
+						copied.remove(order[i]);
+					}
+					fieldOrder.addAll(copied);
+					this.fieldOrder = fieldOrder.toArray(new String[0]);
+				}
+			} catch (Throwable t) {
+			}
+
+			try {
 				client.removeQuery(id);
-			} catch (IOException e) {
+			} catch (Throwable t) {
 			}
 		}
 		return isEnd;
@@ -101,18 +131,22 @@ public class QueryManager implements StreamingResultSet {
 		return headers.toArray(new String[0]);
 	}
 
+	public String[] fieldOrder() {
+		return fieldOrder;
+	}
+
 	public void stop() {
 		try {
 			client.stopQuery(id);
-		} catch (IOException e) {
+		} catch (Throwable t) {
 		}
 		try {
 			client.removeQuery(id);
-		} catch (IOException e1) {
+		} catch (Throwable t) {
 		}
 		try {
 			writer.close();
-		} catch (IOException e) {
+		} catch (Throwable t) {
 		}
 		file.delete();
 	}
