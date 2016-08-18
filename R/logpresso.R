@@ -1,13 +1,13 @@
 logpresso <- new.env()
 logpresso$initialized <- FALSE
 logpresso$client <- "1.0.0-2"
-logpresso$library <- "1.0.0"
+logpresso$library <- "1.0.1"
 
 .init <- function() {
 	library(rJava)
 	.jinit()
 	.jaddClassPath(paste0(system.file(package="RLogpresso"), "/exec/logpresso-sdk-java-", logpresso$client , "-package.jar"))
-	.jaddClassPath(paste0(system.file(package="RLogpresso"), "/exec/RLogpresso-1.0.0.jar"))
+	.jaddClassPath(paste0(system.file(package="RLogpresso"), "/exec/RLogpresso-", logpresso$library, ".jar"))
 	
 	ca <- .jnew("org/apache/log4j/ConsoleAppender", .jcast(.jnew("org/apache/log4j/PatternLayout"), "org/apache/log4j/Layout"))
 	.jcall(ca, "V", "setThreshold", .jcast(.jfield("org/apache/log4j/Level", , "INFO"), "org/apache/log4j/Priority"))
