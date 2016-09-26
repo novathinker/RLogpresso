@@ -16,6 +16,6 @@ Using the 'devtools' package:
 # Usage #
 	
 	> client <- RLogpresso.create()
-	> client$connect("localhost",8888, "id", "password")
+	> client$connect("localhost", 8888, "id", "password")
 	> data <- client$query("table duration=2h sys_cpu_logs | timechart span=2m avg(kernel+user) as value")
 	> summary(data)

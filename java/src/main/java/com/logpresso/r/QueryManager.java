@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -95,8 +96,9 @@ public class QueryManager implements StreamingResultSet {
 					Object[] order = (Object[]) m.get("field_order");
 					List<String> fieldOrder = new ArrayList<String>();
 					for (int i = 0; i < order.length; i++) {
-						fieldOrder.add((String) order[i]);
-						copied.remove(order[i]);
+						if (copied.remove(order[i])) {
+							fieldOrder.add((String) order[i]);
+						}
 					}
 					fieldOrder.addAll(copied);
 					this.fieldOrder = fieldOrder.toArray(new String[0]);

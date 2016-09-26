@@ -1,7 +1,7 @@
 logpresso <- new.env()
 logpresso$initialized <- FALSE
 logpresso$client <- "1.0.0-2"
-logpresso$library <- "1.0.1"
+logpresso$library <- "1.0.2"
 
 .init <- function() {
 	library(rJava)

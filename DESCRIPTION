@@ -1,8 +1,8 @@
 Package: RLogpresso
 Type: Package
 Title: Logpresso for R
-Version: 1.0.1
-Date: 2016-08-17
+Version: 1.0.2
+Date: 2016-09-26
 Author: Lim Hyunsu
 Maintainer: Lim Hyunsu <delmitz@eediom.com>
 Description: Logpresso SDK for R
