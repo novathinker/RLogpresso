@@ -20,7 +20,7 @@ License: \tab Apache License, Version 2.0\cr
 ~~ functions ~~
 }
 \author{
-Maintainer: delmitz <kurosmitz@gmail.com>
+Maintainer: Hyunsu Lim <delmitz@eediom.com>
 }
 \references{
 ~~ Literature or other references for background information ~~
